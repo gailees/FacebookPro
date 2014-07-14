@@ -30,6 +30,11 @@ function blockAndDisplay() {
     $('#interestsNav').remove();
     $('#listsNav').remove();
     $('#rightCol').children().remove();
+
+
+    $('#jewelContainer').children().remove();    
+
+    //$('#facebookNotificationsJewel').remove();
 }
 
 window.setInterval(blockAndDisplay, 100);
