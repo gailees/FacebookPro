@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Turn your Facebook into a Productivity tool",
   "content_scripts": [{
-      "matches": ["*://*.facebook.com/groups/*"],
+      "matches": ["*://*.facebook.com/*"],
       "js": ["jquery-2.1.1.min.js", "pro.js"],
       "run_at": "document_start"
   }],
+  "web_accessible_resources": ["inject.js"],
   "manifest_version": 2
 }

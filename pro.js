@@ -34,3 +34,16 @@ function blockAndDisplay() {
 }
 
 window.setInterval(blockAndDisplay, 100);
+
+// inject JS into the page
+// http://stackoverflow.com/questions/12095924/is-it-possible-to-inject-a-javascript-code-that-overrides-the-one-existing-in-a
+var s = document.createElement("script");
+s.src = chrome.extension.getURL("inject.js");
+(document.head||document.documentElement).appendChild(s);
+
+// listener for history changes
+function onPageChange(e) {
+    console.log("the page changed!");
+}
+window.addEventListener("pageChange", onPageChange);
+window.addEventListener("popstate", onPageChange);
