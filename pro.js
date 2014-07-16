@@ -23,10 +23,10 @@ function cleanUpPage() {
     //dont want to remove everything here _c51
     var saveHeader = $('#rightCol .groupSkyAux .pagelet #u_0_1').detach();
     var save = $('#rightCol .groupSkyAux .pagelet ._c51').detach();
-    $('.groupSkyAux .pagelet').empty().append(saveHeader).append(save)
+    $('.groupSkyAux .pagelet').empty().append(saveHeader).append(save);
 
     //remove notification jewels in top nav bar -- messages, notifications, and friend requests
-    $('#jewelContainer').children().remove();    
+    $('#jewelContainer').children().remove();
     //$('#facebookNotificationsJewel').remove();
 
     //remove bottom dock -- used for chat
@@ -41,6 +41,11 @@ function cleanUpPage() {
     $("#groupProfileCompletionBlock").remove(); // shown to admins of a group with incomplete info
     $("#groupProfileCompletionBlockNotice").remove(); // similar to above
     $(".cover").remove(); // cover photo
+    $(".groupsTopicsBox").remove(); // group tags
+    $("#pagelet_rhc_footer").remove(); // FB footer
+
+    if (! $("#leftCol").hasClass("fixed_elem"))
+        $("#leftCol").addClass("fixed_elem"); // make the left col not scroll
 }
 
 function addToPosts() {
