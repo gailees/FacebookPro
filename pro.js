@@ -1,4 +1,7 @@
-function blockAndDisplay() {
+// this function (and some other files, like the manifest) from https://github.com/nealwu/KillNewsFeed
+function cleanUpPage() {
+    // remove stuff from the page...
+
     // news feed
     $('[id^=topnews_main_stream], [id^=mostrecent_main_stream], [id^=pagelet_home_stream]').children().remove();
 
@@ -35,9 +38,39 @@ function blockAndDisplay() {
     $('#u_0_25').remove();
     //$('.fbChatSidebar').remove();
 
+    $("#groupProfileCompletionBlock").remove(); // shown to admins of a group with incomplete info
+    $("#groupProfileCompletionBlockNotice").remove(); // similar to above
+    $(".cover").remove(); // cover photo
 }
 
-window.setInterval(blockAndDisplay, 100);
+function addToPosts() {
+    // add functionality to each post
+
+    var posts = $("#pagelet_group_mall").find(".mbm");
+    posts.each(function() {
+        if (! $(this).data("pro-enabled")) {
+            $(this).data("pro-enabled", true);
+
+            var id = $(this).attr("id");
+            $(this).find("._3dp").children().first().append(
+                $("<input>")
+                    .attr("id", id + "-completed")
+                    .attr("type", "checkbox")
+                    .css("float", "right")
+                    .css("margin-right", "20px")
+            );
+            $(this).find("._3dp").children().first().append(
+                $("<label>")
+                    .attr("for", id + "-completed")
+                    .css("float", "right")
+                    .text("Mark as completed")
+            );
+        }
+    });
+}
+
+window.setInterval(cleanUpPage, 100);
+window.setInterval(addToPosts, 100);
 
 // inject JS into the page
 // http://stackoverflow.com/questions/12095924/is-it-possible-to-inject-a-javascript-code-that-overrides-the-one-existing-in-a
@@ -47,7 +80,7 @@ s.src = chrome.extension.getURL("inject.js");
 
 // listener for history changes
 function onPageChange(e) {
-    console.log("the page changed!");
+    // since everything is currently done via setInterval, we don't need to do anything here
 }
-window.addEventListener("pageChange", onPageChange);
-window.addEventListener("popstate", onPageChange);
+window.addEventListener("pageChange", onPageChange); // page changes
+window.addEventListener("popstate", onPageChange); // user hits the browser back button
