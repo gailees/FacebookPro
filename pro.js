@@ -25,6 +25,9 @@ function cleanUpPage() {
     var save = $('#rightCol .groupSkyAux .pagelet ._c51').detach();
     $('.groupSkyAux .pagelet').empty().append(saveHeader).append(save);
 
+
+    filterPost('mall_post_791307367591417:6')
+
     //remove notification jewels in top nav bar -- messages, notifications, and friend requests
     $('#jewelContainer').children().remove();
     //$('#facebookNotificationsJewel').remove();
@@ -72,6 +75,11 @@ function addToPosts() {
             );
         }
     });
+}
+
+function filterPost (postID) {
+    //have to double backslash colons to select css IDs with colons
+    $('#' + postID.replace(':', '\\:')).children().remove()
 }
 
 window.setInterval(cleanUpPage, 100);
