@@ -16,7 +16,11 @@ function blockAndDisplay() {
     $('#developerNav').remove();
     $('#interestsNav').remove();
     $('#listsNav').remove();
-    $('#rightCol').children().remove();
+
+    //dont want to remove everything here _c51
+    var saveHeader = $('#rightCol .groupSkyAux .pagelet #u_0_1').detach();
+    var save = $('#rightCol .groupSkyAux .pagelet ._c51').detach();
+    $('.groupSkyAux .pagelet').empty().append(saveHeader).append(save)
 
     //remove notification jewels in top nav bar -- messages, notifications, and friend requests
     $('#jewelContainer').children().remove();    
