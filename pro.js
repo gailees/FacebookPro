@@ -72,6 +72,7 @@ function dirtyPosts() {
 function addToPosts() {
     // add functionality to each post
 
+    // excludes pinned posts, those have weird IDs
     var posts = $("#pagelet_group_mall").find(".mbm");
     posts.each(function() {
         if (! $(this).data("pro-enabled")) {
@@ -102,7 +103,7 @@ function addToPosts() {
 }
 
 function filterPostsWithTerm (term) {
-    //doesn't select pinned post
+    // excludes pinned posts, those have weird IDs
     var posts = $("#pagelet_group_mall").find(".mbm");
     posts.each(function() {
         var post_id = $(this).attr("id");
