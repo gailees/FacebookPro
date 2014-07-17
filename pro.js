@@ -143,9 +143,16 @@ function start() {
     });
 }
 
-window.setInterval(cleanUpPage, 100);
-window.setInterval(addToPosts, 100);
-window.setInterval(filterPostsWithTerm, 100);
+function makePro() {
+    // the extension is limited to *.facebook.com/* so this simple indexOf works
+    if (window.location.href.indexOf(".facebook.com/groups/") >= 0) {
+        cleanUpPage();
+        addToPosts();
+        filterPostsWithTerm();
+    }
+}
+
+window.setInterval(makePro, 100);
 
 // inject JS into the page
 // http://stackoverflow.com/questions/12095924/is-it-possible-to-inject-a-javascript-code-that-overrides-the-one-existing-in-a
