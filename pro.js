@@ -78,8 +78,8 @@ function addToPosts() {
 }
 
 function filterPost (postID) {
-    //have to double backslash colons to select css IDs with colons
-    $('#' + postID.replace(':', '\\:')).children().remove()
+    // need to use id= because of colons
+    $("[id='" + postID + "']").children().remove();
 }
 
 window.setInterval(cleanUpPage, 100);
