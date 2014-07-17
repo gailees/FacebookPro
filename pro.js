@@ -110,7 +110,7 @@ function filterPostsWithTerm (term) {
         //console.log(post_id)
         if($(this).is(':contains(Todo)')) {
             console.log('Todo!')
-            $(this).children().remove()
+            $(this).remove()
         }
 
     });
