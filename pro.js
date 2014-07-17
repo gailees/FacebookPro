@@ -1,3 +1,13 @@
+var fb_url = "";
+$.getJSON(chrome.extension.getURL('config.json'), function(settings) {
+    fb_url = settings.firebase_url;
+    start();
+});
+
+function fbDataRef(node) {
+    return new Firebase(fb_url + node);
+}
+
 // this function (and some other files, like the manifest) from https://github.com/nealwu/KillNewsFeed
 function cleanUpPage() {
     // remove stuff from the page...
@@ -51,6 +61,14 @@ function cleanUpPage() {
         $("#leftCol").addClass("fixed_elem"); // make the left col not scroll
 }
 
+function dirtyPosts() {
+    // just call this once (a persistent callback is already attached) -- we can't count on the
+    // persistent callback to work because it isn't triggered until we have new data
+    fbDataRef("post_completed").once('value', function(snapshot) {
+        updatePostCompleted(snapshot.val());
+    });
+}
+
 function addToPosts() {
     // add functionality to each post
 
@@ -59,20 +77,26 @@ function addToPosts() {
         if (! $(this).data("pro-enabled")) {
             $(this).data("pro-enabled", true);
 
-            var id = $(this).attr("id");
+            var post_id = $(this).attr("id");
             $(this).find("._3dp").children().first().append(
                 $("<input>")
-                    .attr("id", id + "-completed")
+                    .attr("id", post_id + "-completed")
+                    .data("data-post-id", post_id)
                     .attr("type", "checkbox")
                     .css("float", "right")
                     .css("margin-right", "20px")
+                    .addClass("fbpro-completed-checkbox")
             );
             $(this).find("._3dp").children().first().append(
                 $("<label>")
-                    .attr("for", id + "-completed")
+                    .attr("for", post_id + "-completed")
                     .css("float", "right")
                     .text("Mark as completed")
             );
+
+            // we have new post(s), maybe from a page change or from infinite scrolling (and this
+            // should be called *after* we've updated posts)
+            dirtyPosts();
         }
     });
 }
@@ -80,6 +104,28 @@ function addToPosts() {
 function filterPost (postID) {
     // need to use id= because of colons
     $("[id='" + postID + "']").children().remove();
+}
+
+function updatePostCompleted(vals) {
+    $.each(vals, function(post_id, completed) {
+        var post = $("[id='" + post_id + "']"); // need this because post_id can have colons
+        post.toggleClass("fbpro-is-completed", completed);
+        post.find(".fbpro-completed-checkbox").prop("checked", completed);
+    });
+}
+
+$(document).on("click", ".fbpro-completed-checkbox", function(e) {
+    var post_id = $(this).data("data-post-id");
+    var data_ref = fbDataRef("post_completed/" + post_id);
+    data_ref.set($(this).prop("checked"));
+});
+
+function start() {
+    // waits until the Firebase URL is available
+
+    fbDataRef("post_completed").on('value', function(snapshot) {
+        updatePostCompleted(snapshot.val());
+    });
 }
 
 window.setInterval(cleanUpPage, 100);
@@ -93,7 +139,7 @@ s.src = chrome.extension.getURL("inject.js");
 
 // listener for history changes
 function onPageChange(e) {
-    // since everything is currently done via setInterval, we don't need to do anything here
+    // cleanUpPage and addToPosts are called every 100ms, so they don't need to be called here
 }
 window.addEventListener("pageChange", onPageChange); // page changes
 window.addEventListener("popstate", onPageChange); // user hits the browser back button

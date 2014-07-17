@@ -4,9 +4,10 @@
   "description": "Turn your Facebook into a Productivity tool",
   "content_scripts": [{
       "matches": ["*://*.facebook.com/*"],
-      "js": ["jquery-2.1.1.min.js", "pro.js"],
+      "js": ["jquery-2.1.1.min.js", "firebase.js", "pro.js"],
       "run_at": "document_start"
   }],
-  "web_accessible_resources": ["inject.js"],
+  "web_accessible_resources": ["inject.js", "config.json"],
+  "content_security_policy": "script-src 'self' https://cdn.firebase.com https://*.firebaseio.com https://*.firebaseio-demo.com; object-src 'self'",
   "manifest_version": 2
 }
