@@ -110,7 +110,7 @@ function filterPostsWithTerm (term) {
         //console.log(post_id)
         if($(this).is(':contains(Todo)')) {
             console.log('Todo!')
-            $(this).remove()
+            filterPost(post_id)
         }
 
     });
@@ -118,7 +118,7 @@ function filterPostsWithTerm (term) {
 
 function filterPost (postID) {
     // need to use id= because of colons
-    $("[id='" + postID + "']").children().remove();
+    $("[id='" + postID + "']").remove();
 }
 
 function updatePostCompleted(vals) {
