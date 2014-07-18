@@ -4,6 +4,8 @@ $.getJSON(chrome.extension.getURL('config.json'), function(settings) {
     start();
 });
 
+var globalPostsArray = [];
+
 function fbDataRef(node) {
     return new Firebase(fb_url + node);
 }
@@ -71,17 +73,24 @@ function dirtyPosts() {
     });
 }
 
+//MAYBE USE ANGULAR TO APPEND TO A GLOBAL VARIABLE
 function postsJSON() {
+    globalPostsArray = [];
     var posts = $("#pagelet_group_mall").find(".mbm");
     posts.each(function() {
+        var formattedPost = {
+            "OP": $(this).find('a._5pb8').attr('href'),
+            "message": $(this).find('div._5pbx').text(),
+            "postID": $(this).attr("id")
+        }
+        globalPostsArray.push(formattedPost);
         //message: ._5pbx .userContent
         //var postMessage = $(this).find('.5pbx .userContent')
-        var postMessage = $(this).find('a._5pb8')
-        var message = postMessage.attr('href')
-        console.log(message)
+        //var postMessage = $(this).find('a._5pb8')
+        //var message = postMessage.attr('href')
+        console.log(globalPostsArray)
     })
 }
-
 
 function addToPosts() {
     // add functionality to each post
@@ -173,6 +182,7 @@ s.src = chrome.extension.getURL("inject.js");
 // listener for history changes
 function onPageChange(e) {
     // cleanUpPage and addToPosts are called every 100ms, so they don't need to be called here
+    postsJSON();
 }
 
 window.addEventListener("load", postsJSON, false); //page loads
