@@ -37,8 +37,7 @@ function cleanUpPage() {
     var save = $('#rightCol .groupSkyAux .pagelet ._c51').detach();
     $('.groupSkyAux .pagelet').empty().append(saveHeader).append(save);
 
-
-    removePost('mall_post_791307367591417:6')
+    //removePost('mall_post_647472242009222:6')
 
     //remove notification jewels in top nav bar -- messages, notifications, and friend requests
     $('#jewelContainer').children().remove();
@@ -65,6 +64,43 @@ function cleanUpPage() {
     //postsJSON();
 }
 
+function collapsePost(postID) {
+    var post = $("[id='" + postID + "']");
+    post.find(".commentable_item").hide();
+    console.log('collapsed ' + postID)
+    //post.hide();
+    //post.not('.userContentWrapper').hide();
+    //console.log('hidden');
+    //shortPost = post.not(document.getElementByClassName("clearfix"))
+    //shortPost.hide();
+    //removePost(postID);
+    //console.log(postID);
+}
+
+//collapses all posts similar to gmail
+function collapsePosts () {
+    var posts = $("#pagelet_group_mall").find(".mbm");
+    posts.each(function() {
+        //dont want to remove everything here _c51
+        var post_id = $(this).attr("id");
+        collapsePost(post_id);
+        //console.log(post_id)
+    })
+}
+
+//expands a post from collapsed mode onClick
+//have to capture click event somewhere
+function expandPost (postID) {
+    var post = $("[id='" + postID + "']");
+    post.find(".commentable_item").show();
+    console.log('collapsed ' + postID)
+}
+
+//adds options to the left bar under the list of groups
+function addOptions() {
+
+}
+
 function dirtyPosts() {
     // just call this once (a persistent callback is already attached) -- we can't count on the
     // persistent callback to work because it isn't triggered until we have new data
@@ -75,6 +111,10 @@ function dirtyPosts() {
 
 //MAYBE USE ANGULAR TO APPEND TO A GLOBAL VARIABLE
 function postsJSON() {
+    collapsePosts()
+    expandPost('mall_post_647472242009222:6')
+    //collapsePost('mall_post_647472242009222:6')
+    //collapsePost('mall_post_789619974426823:6');
     globalPostsArray = [];
     var posts = $("#pagelet_group_mall").find(".mbm");
     posts.each(function() {
@@ -141,6 +181,7 @@ function removePostsWithTerm (term) {
 function removePost (postID) {
     // need to use id= because of colons
     $("[id='" + postID + "']").remove();
+    console.log('removed' + postID);
 }
 
 function downplayPost (postID) {
@@ -199,6 +240,7 @@ function onPageChange(e) {
     postsJSON();
 }
 
+//window.addEventListener("load", removePost('mall_post_647472242009222:6'), false)
 window.addEventListener("load", postsJSON, false); //page loads
 window.addEventListener("pageChange", onPageChange); // page changes
 window.addEventListener("popstate", onPageChange); // user hits the browser back button
