@@ -151,6 +151,11 @@ function updatePostCompleted(vals) {
     $.each(vals, function(post_id, completed) {
         var post = $("[id='" + post_id + "']"); // need this because post_id can have colons
         post.toggleClass("fbpro-is-completed", completed);
+        if (completed) {
+            removePost(post_id);
+        } else {
+            // TODO insert here
+        }
         post.find(".fbpro-completed-checkbox").prop("checked", completed);
     });
 }
