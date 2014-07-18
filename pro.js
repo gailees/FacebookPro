@@ -125,6 +125,7 @@ function addToPosts() {
     });
 }
 
+//**NEED TO MAKE THIS DYNAMIC
 function removePostsWithTerm (term) {
     //doesn't select pinned post
     var posts = $("#pagelet_group_mall").find(".mbm");

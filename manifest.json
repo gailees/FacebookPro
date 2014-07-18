@@ -2,12 +2,15 @@
   "name": "Facebook Pro",
   "version": "1.0.0",
   "description": "Turn your Facebook into a Productivity tool",
+  "background": {
+    "page": "background.html"
+  },
   "content_scripts": [{
       "matches": ["*://*.facebook.com/*"],
       "js": ["jquery-2.1.1.min.js", "firebase.js", "pro.js"],
       "run_at": "document_start"
   }],
-  "web_accessible_resources": ["inject.js", "config.json"],
+  "web_accessible_resources": ["inject.js", "config.json", "angular.min.js"],
   "content_security_policy": "script-src 'self' https://cdn.firebase.com https://*.firebaseio.com https://*.firebaseio-demo.com; object-src 'self'",
   "manifest_version": 2
 }
