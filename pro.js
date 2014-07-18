@@ -4,6 +4,8 @@ $.getJSON(chrome.extension.getURL('config.json'), function(settings) {
     start();
 });
 
+var globalPostsArray = [];
+
 function fbDataRef(node) {
     return new Firebase(fb_url + node);
 }
@@ -36,7 +38,7 @@ function cleanUpPage() {
     $('.groupSkyAux .pagelet').empty().append(saveHeader).append(save);
 
 
-    filterPost('mall_post_791307367591417:6')
+    removePost('mall_post_791307367591417:6')
 
     //remove notification jewels in top nav bar -- messages, notifications, and friend requests
     $('#jewelContainer').children().remove();
@@ -59,6 +61,8 @@ function cleanUpPage() {
 
     if (! $("#leftCol").hasClass("fixed_elem"))
         $("#leftCol").addClass("fixed_elem"); // make the left col not scroll
+
+    //postsJSON();
 }
 
 function dirtyPosts() {
@@ -67,6 +71,25 @@ function dirtyPosts() {
     fbDataRef("post_completed").once('value', function(snapshot) {
         updatePostCompleted(snapshot.val());
     });
+}
+
+//MAYBE USE ANGULAR TO APPEND TO A GLOBAL VARIABLE
+function postsJSON() {
+    globalPostsArray = [];
+    var posts = $("#pagelet_group_mall").find(".mbm");
+    posts.each(function() {
+        var formattedPost = {
+            "OP": $(this).find('a._5pb8').attr('href'),
+            "message": $(this).find('div._5pbx').text(),
+            "postID": $(this).attr("id")
+        }
+        globalPostsArray.push(formattedPost);
+        //message: ._5pbx .userContent
+        //var postMessage = $(this).find('.5pbx .userContent')
+        //var postMessage = $(this).find('a._5pb8')
+        //var message = postMessage.attr('href')
+        console.log(globalPostsArray)
+    })
 }
 
 function addToPosts() {
@@ -102,22 +125,24 @@ function addToPosts() {
     });
 }
 
-function filterPostsWithTerm (term) {
-    // excludes pinned posts, those have weird IDs
+function removePostsWithTerm (term) {
+    //doesn't select pinned post
     var posts = $("#pagelet_group_mall").find(".mbm");
     posts.each(function() {
         var post_id = $(this).attr("id");
-        //console.log('blah')
-        //console.log(post_id)
         if($(this).is(':contains(Todo)')) {
-            console.log('Todo!')
-            filterPost(post_id)
+            removePost(post_id)
         }
 
     });
 }
 
-function filterPost (postID) {
+function removePost (postID) {
+    // need to use id= because of colons
+    $("[id='" + postID + "']").remove();
+}
+
+function downplayPost (postID) {
     // need to use id= because of colons
     $("[id='" + postID + "']").remove();
 }
@@ -150,6 +175,7 @@ function makePro() {
         cleanUpPage();
         addToPosts();
         filterPostsWithTerm();
+        removePostsWithTerm();
     }
 }
 
@@ -164,6 +190,9 @@ s.src = chrome.extension.getURL("inject.js");
 // listener for history changes
 function onPageChange(e) {
     // cleanUpPage and addToPosts are called every 100ms, so they don't need to be called here
+    postsJSON();
 }
+
+window.addEventListener("load", postsJSON, false); //page loads
 window.addEventListener("pageChange", onPageChange); // page changes
 window.addEventListener("popstate", onPageChange); // user hits the browser back button
