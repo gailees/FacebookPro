@@ -67,6 +67,7 @@ function cleanUpPage() {
 function collapsePost(postID) {
     var post = $("[id='" + postID + "']");
     post.find(".commentable_item").hide();
+    post.find("._6m2").hide();
     console.log('collapsed ' + postID)
     //post.hide();
     //post.not('.userContentWrapper').hide();
@@ -93,6 +94,7 @@ function collapsePosts () {
 function expandPost (postID) {
     var post = $("[id='" + postID + "']");
     post.find(".commentable_item").show();
+    post.find("._6m2").show();
     console.log('collapsed ' + postID)
 }
 
@@ -112,7 +114,7 @@ function dirtyPosts() {
 //MAYBE USE ANGULAR TO APPEND TO A GLOBAL VARIABLE
 function postsJSON() {
     //**maybe need to re-initiate this
-    //collapsePosts()
+    collapsePosts();
     expandPost('mall_post_647472242009222:6')
     //collapsePost('mall_post_647472242009222:6')
     //collapsePost('mall_post_789619974426823:6');
@@ -195,7 +197,7 @@ function updatePostCompleted(vals) {
         var post = $("[id='" + post_id + "']"); // need this because post_id can have colons
         post.toggleClass("fbpro-is-completed", completed);
         if (completed) {
-            collapsePost(post_id);
+            removePost(post_id);
         } else {
             // TODO insert here
             expandPost(post_id);
@@ -208,6 +210,13 @@ $(document).on("click", ".fbpro-completed-checkbox", function(e) {
     var post_id = $(this).data("data-post-id");
     var data_ref = fbDataRef("post_completed/" + post_id);
     data_ref.set($(this).prop("checked"));
+});
+
+$(document).on("click", ".mbm", function(e) {
+    var post_id = $(this).data("data-post-id");
+    expandPost(post_id);
+    //var data_ref = fbDataRef("post_completed/" + post_id);
+    //data_ref.set($(this).prop("checked"));
 });
 
 function start() {
