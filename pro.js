@@ -111,7 +111,8 @@ function dirtyPosts() {
 
 //MAYBE USE ANGULAR TO APPEND TO A GLOBAL VARIABLE
 function postsJSON() {
-    collapsePosts()
+    //**maybe need to re-initiate this
+    //collapsePosts()
     expandPost('mall_post_647472242009222:6')
     //collapsePost('mall_post_647472242009222:6')
     //collapsePost('mall_post_789619974426823:6');
@@ -194,9 +195,10 @@ function updatePostCompleted(vals) {
         var post = $("[id='" + post_id + "']"); // need this because post_id can have colons
         post.toggleClass("fbpro-is-completed", completed);
         if (completed) {
-            removePost(post_id);
+            collapsePost(post_id);
         } else {
             // TODO insert here
+            expandPost(post_id);
         }
         post.find(".fbpro-completed-checkbox").prop("checked", completed);
     });
@@ -221,7 +223,7 @@ function makePro() {
     if (window.location.href.indexOf(".facebook.com/groups/") >= 0) {
         cleanUpPage();
         addToPosts();
-        filterPostsWithTerm();
+        //filterPostsWithTerm();
         removePostsWithTerm();
     }
 }
