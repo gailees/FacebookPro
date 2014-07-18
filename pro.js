@@ -36,7 +36,7 @@ function cleanUpPage() {
     $('.groupSkyAux .pagelet').empty().append(saveHeader).append(save);
 
 
-    filterPost('mall_post_791307367591417:6')
+    removePost('mall_post_791307367591417:6')
 
     //remove notification jewels in top nav bar -- messages, notifications, and friend requests
     $('#jewelContainer').children().remove();
@@ -59,6 +59,8 @@ function cleanUpPage() {
 
     if (! $("#leftCol").hasClass("fixed_elem"))
         $("#leftCol").addClass("fixed_elem"); // make the left col not scroll
+
+    //postsJSON();
 }
 
 function dirtyPosts() {
@@ -68,6 +70,18 @@ function dirtyPosts() {
         updatePostCompleted(snapshot.val());
     });
 }
+
+function postsJSON() {
+    var posts = $("#pagelet_group_mall").find(".mbm");
+    posts.each(function() {
+        //message: ._5pbx .userContent
+        //var postMessage = $(this).find('.5pbx .userContent')
+        var postMessage = $(this).find('a._5pb8')
+        var message = postMessage.attr('href')
+        console.log(message)
+    })
+}
+
 
 function addToPosts() {
     // add functionality to each post
@@ -101,22 +115,24 @@ function addToPosts() {
     });
 }
 
-function filterPostsWithTerm (term) {
+function removePostsWithTerm (term) {
     //doesn't select pinned post
     var posts = $("#pagelet_group_mall").find(".mbm");
     posts.each(function() {
         var post_id = $(this).attr("id");
-        //console.log('blah')
-        //console.log(post_id)
         if($(this).is(':contains(Todo)')) {
-            console.log('Todo!')
-            filterPost(post_id)
+            removePost(post_id)
         }
 
     });
 }
 
-function filterPost (postID) {
+function removePost (postID) {
+    // need to use id= because of colons
+    $("[id='" + postID + "']").remove();
+}
+
+function downplayPost (postID) {
     // need to use id= because of colons
     $("[id='" + postID + "']").remove();
 }
@@ -145,7 +161,8 @@ function start() {
 
 window.setInterval(cleanUpPage, 100);
 window.setInterval(addToPosts, 100);
-window.setInterval(filterPostsWithTerm, 100);
+window.setInterval(removePostsWithTerm, 100);
+//window.setInterval(postsJSON, 150);
 
 // inject JS into the page
 // http://stackoverflow.com/questions/12095924/is-it-possible-to-inject-a-javascript-code-that-overrides-the-one-existing-in-a
@@ -157,5 +174,7 @@ s.src = chrome.extension.getURL("inject.js");
 function onPageChange(e) {
     // cleanUpPage and addToPosts are called every 100ms, so they don't need to be called here
 }
+
+window.addEventListener("load", postsJSON, false); //page loads
 window.addEventListener("pageChange", onPageChange); // page changes
 window.addEventListener("popstate", onPageChange); // user hits the browser back button
