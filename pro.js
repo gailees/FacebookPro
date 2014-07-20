@@ -68,6 +68,12 @@ function collapsePost(postID) {
     var post = $("[id='" + postID + "']");
     post.find(".commentable_item").hide();
     post.find("._6m2").hide();
+    //_4sdm _6lh _dcs mtm
+    post.find('._4sdm').hide()
+    //_5cq3 mtm
+    post.find('._5cq3').hide()
+    //**shorten text posts that are long
+    //dont lose links
     console.log('collapsed ' + postID)
     //post.hide();
     //post.not('.userContentWrapper').hide();
@@ -95,6 +101,8 @@ function expandPost (postID) {
     var post = $("[id='" + postID + "']");
     post.find(".commentable_item").show();
     post.find("._6m2").show();
+    post.find('._4sdm').show()
+    post.find('._5cq3').show()
     console.log('collapsed ' + postID)
 }
 
@@ -197,7 +205,7 @@ function updatePostCompleted(vals) {
         var post = $("[id='" + post_id + "']"); // need this because post_id can have colons
         post.toggleClass("fbpro-is-completed", completed);
         if (completed) {
-            removePost(post_id);
+            collapsePost(post_id);
         } else {
             // TODO insert here
             expandPost(post_id);
