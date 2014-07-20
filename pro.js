@@ -125,6 +125,16 @@ function dirtyPosts() {
 
 //MAYBE USE ANGULAR TO APPEND TO A GLOBAL VARIABLE
 function postsJSON() {
+
+    $(".mbm").click(function(){
+        var post_id = $(this).attr("id");
+        //make clickable
+        //$(this).css
+        //userContentWrapper _5pcr _3ccb
+        console.log('blah');
+        //need to figure out toggle -- sync with another firebase variable
+        expandPost(post_id);
+    });
     //**maybe need to re-initiate this
     collapsePosts();
     expandPost('mall_post_647472242009222:6')
