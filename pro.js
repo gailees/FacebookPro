@@ -72,6 +72,9 @@ function collapsePost(postID) {
     post.find('._4sdm').hide()
     //_5cq3 mtm
     post.find('._5cq3').hide()
+    post.find('._5r69').hide()
+    //**WHAT TO DO with this type: 
+    //https://www.dropbox.com/s/hc3hu3utnhtf7la/Screenshot%202014-07-20%2001.18.05.png
     //**shorten text posts that are long
     //dont lose links
     console.log('collapsed ' + postID)
@@ -103,6 +106,7 @@ function expandPost (postID) {
     post.find("._6m2").show();
     post.find('._4sdm').show()
     post.find('._5cq3').show()
+    post.find('._5r69').show()
     console.log('collapsed ' + postID)
 }
 
